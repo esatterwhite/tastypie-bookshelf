@@ -10,27 +10,30 @@
     "type": "git",
     "url": "https://github.com/esatterwhite/tastypie-bookshelf.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Eric Satterwhite",
+    "email": "eric@codedependant.net"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/esatterwhite/tastypie-bookshelf/issues"
   },
   "homepage": "https://github.com/esatterwhite/tastypie-bookshelf",
   "devDependencies": {
     "bookshelf": "^0.8.2",
-    "hapi": "^9.3.1",
-    "joi": "^6.8.1",
+    "hapi": "^13.0.0",
+    "joi": "^8.4.0",
     "mocha": "^2.3.3",
     "should": "^7.1.0"
   },
   "peerDependencies": {
-    "tastypie": "^2.0.0"
+    "tastypie": "^3.0.0",
+    "hapi": ">=13.0.0",
+    "boom": ">=2.8.0",
+    "joi": ".>8.0.0"
   },
   "dependencies": {
-    "async": "^1.4.2",
-    "boom": "^2.9.0",
-    "debug": "^2.2.0",
-    "mout": "^0.11.0",
-    "qs": "^5.1.0"
-  }
+    "co": "^4.6.0",
+    "debug": "^2.2.0"
+  },
 }
