@@ -1,4 +1,6 @@
 test/
+script/
+conf/
 *.swp
 *.save
 *.sqlite
