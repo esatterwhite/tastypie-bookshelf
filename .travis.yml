@@ -15,4 +15,4 @@ before_install:
   - if [ $DB == "mysql" ]; then mysql -e 'create database tastypie'; fi
   - if [ $DB == "pg" ]; then psql -c 'create database tastypie;' -U postgres; fi
 before_script:
-  - node scripts/boostrap
+  - node scripts/bootstrap
