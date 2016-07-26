@@ -18,8 +18,8 @@ before_install:
       if [ $DB == "pg" ]; then
         psql -c 'create database tastypie;' -U postgres; 
         database__connection__user=postgres;
-        psql -l -U postgres
       fi
+  - psql -l
 before_script:
   - printenv | sort
   - node scripts/bootstrap
