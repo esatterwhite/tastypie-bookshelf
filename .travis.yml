@@ -16,6 +16,7 @@ before_install:
   - if [ $DB == "mysql" ]; then export database__connection__user=travis; fi
   - if [ $DB == "pg" ]; then psql -c 'create database tastypie;' -U postgres; fi
   - if [ $DB == "pg" ]; then export database__connection__user=postgres; fi
+  - if [ $DB == "pg" ]; then export psql -l; fi
 before_script:
   - printenv | sort
   - node scripts/bootstrap
