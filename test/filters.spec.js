@@ -5,10 +5,13 @@ var assert      = require('assert')
   , path        = require('path')
   , os          = require('os')
   , util        = require('util')
+  , User        = require('./user')
   , filters     = require('../lib/resource/filters')
-  , date        = require('@fulfill/cage/date')
-  , Movement    = require('@fulfill/cage').mySQL.models.Movement
   ;
+
+function within( now, start, end){
+	return ( now > start && now < end);
+}
 
 describe('memphis', function(){
 
@@ -24,7 +27,7 @@ describe('memphis', function(){
 	describe('filters', function(){
 		describe('gt', function(){
 			it('should return data greater than the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.gt(qb, 'real_sold', 10 );
 					qb.limit(10)
 					  .then( function( data ){
@@ -38,7 +41,7 @@ describe('memphis', function(){
 			});
 
 			it('should not return data less than the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.gt(qb, 'real_sold', 10 );
 					qb = qb.limit(10);
 					qb
@@ -56,7 +59,7 @@ describe('memphis', function(){
 		});
 		describe('gte', function(){
 			it('should return data greater than the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.gte(qb, 'real_sold', 10 );
 					qb.limit(10)
 					  .then( function( data ){
@@ -70,7 +73,7 @@ describe('memphis', function(){
 			});
 
 			it('should not return data less than the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.gt(qb, 'real_sold', 10 );
 					qb.limit(10)
 					  .then( function( data ){
@@ -86,7 +89,7 @@ describe('memphis', function(){
 		});
 		describe('lt', function(){
 			it('should return data less than the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.lt(qb, 'real_sold', 10 );
 					qb.limit(10)
 					  .then( function( data ){
@@ -100,7 +103,7 @@ describe('memphis', function(){
 			});
 
 			it('should not return data greater than the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.lt(qb, 'real_sold', 10 );
 					qb = qb.limit(10);
 					qb
@@ -116,7 +119,7 @@ describe('memphis', function(){
 		});
 		describe('lte', function(){
 			it('should return data less than or equal to the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.lte(qb, 'real_sold', 10 );
 					qb.limit(10)
 					  .then( function( data ){
@@ -130,7 +133,7 @@ describe('memphis', function(){
 			});
 
 			it('should not return data greater than or equal to the specified values', function( done ){
-				Movement.collection().query(function(qb){
+				User.collection().query(function(qb){
 					qb = filters.lte(qb, 'real_sold', 10 );
 					qb = qb.limit(10);
 					qb
@@ -147,7 +150,7 @@ describe('memphis', function(){
 		describe('isnull', function(){
 			describe('is true', function(){
 				it('should only return values where then value is null', function(done){
-					Movement.collection().query(function( qb ){
+					User.collection().query(function( qb ){
 						qb = filters.isnull(qb, 'issue', true );
 						qb = qb.limit(10)
 						  .then( function( data ){
@@ -162,7 +165,7 @@ describe('memphis', function(){
 
 			describe('is false', function(){
 				it('should only return value that are not null', function( done ){
-					Movement.collection().query(function( qb ){
+					User.collection().query(function( qb ){
 						qb = filters.isnull(qb, 'issue', false );
 						qb = qb.limit(10)
 						  .then( function( data ){
@@ -178,7 +181,7 @@ describe('memphis', function(){
 
 		describe('contains', function(){
 			it('should match values any where in a string in a case sensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.contains(qb, 'url', 'ead' )
 						   .limit(10)
 						   .then( function( data ){
@@ -195,7 +198,7 @@ describe('memphis', function(){
 		
 		describe('icontains', function(){
 			it('should match values any where in a string in a case insensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.contains(qb, 'url', 'ead' )
 						   .limit(10)
 						   .then( function( data ){
@@ -213,7 +216,7 @@ describe('memphis', function(){
 
 		describe('startswith', function(){
 			it('should match values at the beginning of a string in a case sensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.startswith(qb, 'url', 'thread' )
 						   .limit(10)
 						   .then( function( data ){
@@ -227,7 +230,7 @@ describe('memphis', function(){
 				});
 			});
 			it('should not match values at the end of a string in a case sensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.startswith(qb, 'url', 'thread' )
 						   .limit(10)
 						   .then( function( data ){
@@ -243,7 +246,7 @@ describe('memphis', function(){
 
 		describe('istartswith', function(){
 			it('should match values that startwith a string in a case sensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.istartswith(qb, 'url', 'THREAD' )
 						   .limit(10)
 						   .then( function( data ){
@@ -258,7 +261,7 @@ describe('memphis', function(){
 		});
 		describe('endswith', function(){
 			it('should match values that endswith a string in a case sensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.endswith(qb, 'url', 'me' )
 						   .limit(10)
 						   .then( function( data ){
@@ -275,7 +278,7 @@ describe('memphis', function(){
 		});
 		describe('iendswith', function(){
 			it('should match values that endswith a string in a case insensitive manner', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters.iendswith(qb, 'url', 'me' )
 						   .limit(10)
 						   .then( function( data ){
@@ -293,7 +296,7 @@ describe('memphis', function(){
 		});
 		describe('range', function(){
 			it('should should match dates between a given date range',function(done){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					var start, end;
 					start = new Date(2015, 7, 1)
 					end = new Date(2015, 8, 1)
@@ -303,7 +306,7 @@ describe('memphis', function(){
 						   .then( function( data ){
 						   		assert.ok( data.length )
 						   		data.forEach(function( item ){
-						   			should.ok( date.within( item.created_at, start, end ))
+						   			should.ok( within( item.created_at, start, end ))
 						   		});
 						   		done();
 						   })
@@ -316,7 +319,7 @@ describe('memphis', function(){
 				start = new Date(2015, 7, 1)
 				end = new Date(2015, 8, 1)
 				assert.throws(function(){
-					var qb = Movement.collection().query().clone()
+					var qb = User.collection().query().clone()
 
 					filters.range(qb, 'created_at', ['2015-09-01', '2015-08-01'] )
 						   .limit(10)
@@ -332,7 +335,7 @@ describe('memphis', function(){
 
 		describe('ne', function(){
 			it('should only include values not equal to a specified value', function( done ){
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters
 						.ne( qb, 'id', 1)
 						.limit( 10 )
@@ -350,7 +353,7 @@ describe('memphis', function(){
 		describe('in', function(){
 			it('should only include values not equal to a specified value', function( done ){
 				var ids = [1,2,3,4,5,6,7,8];
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters
 						.in( qb, 'id', ids )
 						.limit( 10 )
@@ -366,7 +369,7 @@ describe('memphis', function(){
 		describe('nin', function(){
 			it('should exclude values not equal to a specified value', function( done ){
 				var ids = [1,2,3,4,5,6,7,8];
-				Movement.collection().query(function( qb ){
+				User.collection().query(function( qb ){
 					filters
 						.in( qb, 'id', ids )
 						.limit( 10 )

@@ -9,11 +9,14 @@ var assert             = require('assert')
   , util               = require('util')
   , filters            = require('../lib/resource/filters')
   , BookshelfResource  = require('../lib/resource')
-  , Customer           = require('@fulfill/cage').mySQL.models.Customer
-  , date               = require('@fulfill/cage/date')
+  , User           	   = require('./user')
   ;
 
-describe('memphis', function(){
+function within( now, start, end){
+	return ( now > start && now < end);
+}
+
+describe('Bookshelf Resource', function(){
     var server, loader, api, Resource;
 	before(function( done ){
 		server = new hapi.Server();
@@ -21,8 +24,8 @@ describe('memphis', function(){
 		server.connection({host:'localhost'});
 		Resource = BookshelfResource.extend({
 			options:{
-				name:'customer'
-				,queryset: Customer
+				name:'user'
+				,queryset: User
 				,allowed:{
 					list:{ get: true },
 					detail:{ get: true }
@@ -53,7 +56,7 @@ describe('memphis', function(){
 			it('should return data greater than the specified values', function( done ){
 			
 				server.inject({
-					url:'/test/customer?id__gt=20000&limit=10',
+					url:'/test/user?id__gt=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -73,7 +76,7 @@ describe('memphis', function(){
 
 			it('should not return data less than the specified values', function( done ){
 				server.inject({
-					url:'/test/customer?id__gt=20000&limit=10',
+					url:'/test/user?id__gt=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -97,7 +100,7 @@ describe('memphis', function(){
 		describe('gte', function(){
 			it('should return data greater than the specified values', function( done ){
 				server.inject({
-					url:'/test/customer?id__gte=20000&limit=10',
+					url:'/test/user?id__gte=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -118,7 +121,7 @@ describe('memphis', function(){
 
 			it('should not return data less than the specified values', function( done ){
 				server.inject({
-					url:'/test/customer?id__lte=20000&limit=10',
+					url:'/test/user?id__lte=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -141,7 +144,7 @@ describe('memphis', function(){
 		describe('lt', function(){
 			it('should return data less than the specified values', function( done ){
 				server.inject({
-					url:'/test/customer?id__lt=20000&limit=10',
+					url:'/test/user?id__lt=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -166,7 +169,7 @@ describe('memphis', function(){
 		describe('lte', function(){
 			it('should return data less than or equal to the specified values', function( done ){
 				server.inject({
-					url:'/test/customer?id__lte=20000&limit=10',
+					url:'/test/user?id__lte=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -187,7 +190,7 @@ describe('memphis', function(){
 
 			it('should not return data greater than or equal to the specified values', function( done ){
 				server.inject({
-					url:'/test/customer?id__lte=20000&limit=10',
+					url:'/test/user?id__lte=20000&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -211,7 +214,7 @@ describe('memphis', function(){
 				it('should only return values where then value is null', function(done){
 				
 					server.inject({
-						url:'/test/customer?first_name__isnull=true&limit=10',
+						url:'/test/user?first_name__isnull=true&limit=10',
 						method:'get',
 						headers:{
 							"Accept":"application/json"
@@ -233,7 +236,7 @@ describe('memphis', function(){
 			describe('is false', function(){
 				it('should only return value that are not null', function( done ){
 					server.inject({
-						url:'/test/customer?first_name__isnull=false&limit=10',
+						url:'/test/user?first_name__isnull=false&limit=10',
 						method:'get',
 						headers:{
 							"Accept":"application/json"
@@ -257,7 +260,7 @@ describe('memphis', function(){
 		describe('contains', function(){
 			it('should match values any where in a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__contains=ri&limit=10',
+					url:'/test/user?first_name__contains=ri&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -282,7 +285,7 @@ describe('memphis', function(){
 		describe('icontains', function(){
 			it('should match values any where in a string in a case insensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__icontains=ri&limit=10',
+					url:'/test/user?first_name__icontains=ri&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -306,7 +309,7 @@ describe('memphis', function(){
 		describe('startswith', function(){
 			it('should match values at the beginning of a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__startswith=Bi&limit=10',
+					url:'/test/user?first_name__startswith=Bi&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -327,7 +330,7 @@ describe('memphis', function(){
 			});
 			it('should not match values at the end of a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__startswith=Bi&limit=10',
+					url:'/test/user?first_name__startswith=Bi&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -352,7 +355,7 @@ describe('memphis', function(){
 		describe('istartswith', function(){
 			it('should match values that startwith a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__istartswith=Bi&limit=10',
+					url:'/test/user?first_name__istartswith=Bi&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -376,7 +379,7 @@ describe('memphis', function(){
 		describe('endswith', function(){
 			it('should match values that endswith a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__endswith=ll&limit=10',
+					url:'/test/user?first_name__endswith=ll&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -399,7 +402,7 @@ describe('memphis', function(){
 		describe('iendswith', function(){
 			it('should match values that endswith a string in a case insensitive manner', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__iendswith=ll&limit=10',
+					url:'/test/user?first_name__iendswith=ll&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -423,7 +426,7 @@ describe('memphis', function(){
 		describe('range', function(){
 			it('should should match dates between a given date range',function( done ){
 				server.inject({
-					url:'/test/customer?created_at__range=2015-04-01,2015-05-01&limit=10',
+					url:'/test/user?created_at__range=2015-04-01,2015-05-01&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -436,7 +439,7 @@ describe('memphis', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						assert.ok( date.within( item.created_at,start,end) );	
+						assert.ok( within( item.created_at,start,end) );	
 					});
 
 					done();
@@ -445,7 +448,7 @@ describe('memphis', function(){
 
 			it('should reject an invalid date range', function( done ){
 				server.inject({
-					url:'/test/customer?created_at__range=2015-05-01,2015-04-01&limit=10',
+					url:'/test/user?created_at__range=2015-05-01,2015-04-01&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -461,7 +464,7 @@ describe('memphis', function(){
 		describe('ne', function(){
 			it('should only include values not equal to a specified value', function( done ){
 				server.inject({
-					url:'/test/customer?first_name__ne=Greg&limit=10',
+					url:'/test/user?first_name__ne=Greg&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -485,7 +488,7 @@ describe('memphis', function(){
 			it('should only include values not equal to a specified value', function( done ){
 				var ids = [1,2,3]
 				server.inject({
-					url:'/test/customer?id__in=1,2,3',
+					url:'/test/user?id__in=1,2,3',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -506,7 +509,7 @@ describe('memphis', function(){
 		describe('nin', function(){
 			it('should exclude values not equal to a specified value', function( done ){
 				server.inject({
-					url:'/test/customer?id__nin=4,5,6',
+					url:'/test/user?id__nin=4,5,6',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
