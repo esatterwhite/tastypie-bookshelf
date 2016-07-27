@@ -26,19 +26,24 @@ describe('Bookshelf Resource', function(){
 			options:{
 				name:'user'
 				,queryset: User
+				,pk:'auth_user_id'
 				,allowed:{
 					list:{ get: true },
 					detail:{ get: true }
 				}
 				,filtering:{
 					id:['lt','gt','lte','gte', 'exact', 'in','nin']
-					,first_name:['isnull', 'startswith','istartswith','endswith','iendswith','contains','icontains', 'ne']
-					,created_at:['range','year','month']
+					,name:['isnull', 'startswith','istartswith','endswith','iendswith','contains','icontains', 'ne']
+					,email:['isnull', 'startswith','istartswith','endswith','iendswith','contains','icontains', 'ne']
+					,eyes:['isnull', 'startswith','istartswith','endswith','iendswith','contains','icontains', 'ne']
+					,registered:['range','year','month']
 				}
 			}
 			,fields:{
-				created_at:{type:'date', nullable: false, blank:false}
-				,first_name:{type:'char', nullable: true, blank: false}
+				registered:{type:'date', nullable: false, blank:false}
+				,name:{type:'char', nullable: false, blank: false}
+				,email:{type:'char', nullable: true, blank: false}
+				,eyes:{type:'char', nullable:false, blank:false, attribute:'eyeColor'}
 			}
 		});
 
@@ -56,7 +61,7 @@ describe('Bookshelf Resource', function(){
 			it('should return data greater than the specified values', function( done ){
 			
 				server.inject({
-					url:'/test/user?id__gt=20000&limit=10',
+					url:'/test/user?id__gt=300&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -67,16 +72,16 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );;
 
 					out.data.forEach(function( item ){
-						item.id.should.be.greaterThan(20000 )
+						item.id.should.be.greaterThan(300 )
 					});
 
 					done();
 				});
 			});
 
-			it('should not return data less than the specified values', function( done ){
+			it('should not return data greater than the specified values', function( done ){
 				server.inject({
-					url:'/test/user?id__gt=20000&limit=10',
+					url:'/test/user?id__gt=100&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -85,10 +90,10 @@ describe('Bookshelf Resource', function(){
 				function( response ){
 
 					assert.equal( typeof response.result, 'string' )
-					var out = JSON.parse( response.result );;
+					var out = JSON.parse( response.result );
 
 					out.data.forEach(function( item ){
-						item.id.should.not.be.lessThan(20000 )
+						item.id.should.not.be.lessThan(100 )
 					});
 
 					done();
@@ -100,7 +105,7 @@ describe('Bookshelf Resource', function(){
 		describe('gte', function(){
 			it('should return data greater than the specified values', function( done ){
 				server.inject({
-					url:'/test/user?id__gte=20000&limit=10',
+					url:'/test/user?id__gte=300&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -112,7 +117,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );;
 
 					out.data.forEach(function( item ){
-						item.id.should.be.greaterThanOrEqual(20000 )
+						item.id.should.be.greaterThanOrEqual(300 )
 					});
 
 					done();
@@ -121,7 +126,7 @@ describe('Bookshelf Resource', function(){
 
 			it('should not return data less than the specified values', function( done ){
 				server.inject({
-					url:'/test/user?id__lte=20000&limit=10',
+					url:'/test/user?id__lte=200&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -133,7 +138,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );;
 
 					out.data.forEach(function( item ){
-						item.id.should.be.lessThanOrEqual(20000 )
+						item.id.should.be.lessThanOrEqual(200 )
 					});
 
 					done();
@@ -144,7 +149,7 @@ describe('Bookshelf Resource', function(){
 		describe('lt', function(){
 			it('should return data less than the specified values', function( done ){
 				server.inject({
-					url:'/test/user?id__lt=20000&limit=10',
+					url:'/test/user?id__lt=300&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -156,7 +161,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );;
 
 					out.data.forEach(function( item ){
-						item.id.should.be.lessThan(20000 )
+						item.id.should.be.lessThan(300 )
 					});
 
 					done();
@@ -169,7 +174,7 @@ describe('Bookshelf Resource', function(){
 		describe('lte', function(){
 			it('should return data less than or equal to the specified values', function( done ){
 				server.inject({
-					url:'/test/user?id__lte=20000&limit=10',
+					url:'/test/user?id__lte=250&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -181,7 +186,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );;
 
 					out.data.forEach(function( item ){
-						item.id.should.be.lessThanOrEqual(20000 )
+						item.id.should.be.lessThanOrEqual(250 )
 					});
 
 					done();
@@ -190,7 +195,7 @@ describe('Bookshelf Resource', function(){
 
 			it('should not return data greater than or equal to the specified values', function( done ){
 				server.inject({
-					url:'/test/user?id__lte=20000&limit=10',
+					url:'/test/user?id__lte=250&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -202,7 +207,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );;
 
 					out.data.forEach(function( item ){
-						item.id.should.not.be.greaterThan(20000 )
+						item.id.should.not.be.greaterThan(250 )
 					});
 
 					done();
@@ -214,7 +219,7 @@ describe('Bookshelf Resource', function(){
 				it('should only return values where then value is null', function(done){
 				
 					server.inject({
-						url:'/test/user?first_name__isnull=true&limit=10',
+						url:'/test/user?email__isnull=true&limit=10',
 						method:'get',
 						headers:{
 							"Accept":"application/json"
@@ -226,7 +231,7 @@ describe('Bookshelf Resource', function(){
 						var out = JSON.parse( response.result );
 						
 						out.data.forEach(function( item ){
-							should.equal( item.first_name, null )
+							should.equal( item.email, null )
 						});
 
 						done();
@@ -236,7 +241,7 @@ describe('Bookshelf Resource', function(){
 			describe('is false', function(){
 				it('should only return value that are not null', function( done ){
 					server.inject({
-						url:'/test/user?first_name__isnull=false&limit=10',
+						url:'/test/user?email__isnull=false&limit=10',
 						method:'get',
 						headers:{
 							"Accept":"application/json"
@@ -247,7 +252,7 @@ describe('Bookshelf Resource', function(){
 						assert.equal( typeof response.result, 'string' )
 						var out = JSON.parse( response.result );
 						out.data.forEach(function( item ){
-							assert.notEqual( item.first_name, null )
+							assert.notEqual( item.email, null )
 						});
 
 						done();
@@ -260,7 +265,7 @@ describe('Bookshelf Resource', function(){
 		describe('contains', function(){
 			it('should match values any where in a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__contains=ri&limit=10',
+					url:'/test/user?name__contains=ri&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -272,8 +277,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 
 					out.data.forEach(function( item ){
-						item.first_name.should.match(/ri/g)
-						item.first_name.should.not.match(/RI/g)
+						item.name.should.match(/ri/g)
+						item.name.should.not.match(/RI/g)
 					});
 
 					done();
@@ -285,7 +290,7 @@ describe('Bookshelf Resource', function(){
 		describe('icontains', function(){
 			it('should match values any where in a string in a case insensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__icontains=ri&limit=10',
+					url:'/test/user?name__icontains=ri&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -297,7 +302,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 
 					out.data.forEach(function( item ){
-						item.first_name.should.match(/ri/g)
+						item.name.should.match(/ri/g)
 					});
 
 					done();
@@ -309,7 +314,7 @@ describe('Bookshelf Resource', function(){
 		describe('startswith', function(){
 			it('should match values at the beginning of a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__startswith=Bi&limit=10',
+					url:'/test/user?name__startswith=Bi&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -320,8 +325,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.first_name.should.match(/^Bi/)
-						item.first_name.should.not.match(/^bi/)
+						item.name.should.match(/^Bi/)
+						item.name.should.not.match(/^bi/)
 					});
 
 					done();
@@ -330,7 +335,7 @@ describe('Bookshelf Resource', function(){
 			});
 			it('should not match values at the end of a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__startswith=Bi&limit=10',
+					url:'/test/user?name__startswith=Bi&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -342,8 +347,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.first_name.should.not.match(/Bi$/)
-						item.first_name.should.not.match(/bi$/)
+						item.name.should.not.match(/Bi$/)
+						item.name.should.not.match(/bi$/)
 					});
 
 					done();
@@ -355,7 +360,7 @@ describe('Bookshelf Resource', function(){
 		describe('istartswith', function(){
 			it('should match values that startwith a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__istartswith=Bi&limit=10',
+					url:'/test/user?name__istartswith=Bi&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -367,8 +372,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.first_name.should.match(/^Bi/i)
-						item.first_name.should.match(/^bi/i)
+						item.name.should.match(/^Bi/i)
+						item.name.should.match(/^bi/i)
 					});
 
 					done();
@@ -379,7 +384,7 @@ describe('Bookshelf Resource', function(){
 		describe('endswith', function(){
 			it('should match values that endswith a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__endswith=ll&limit=10',
+					url:'/test/user?name__endswith=ll&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -391,8 +396,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.first_name.should.match(/ll$/)
-						item.first_name.should.not.match(/LL$/)
+						item.name.should.match(/ll$/)
+						item.name.should.not.match(/LL$/)
 					});
 
 					done();
@@ -402,7 +407,7 @@ describe('Bookshelf Resource', function(){
 		describe('iendswith', function(){
 			it('should match values that endswith a string in a case insensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?first_name__iendswith=ll&limit=10',
+					url:'/test/user?name__iendswith=ll&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -414,8 +419,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.first_name.should.match(/ll$/i)
-						item.first_name.should.match(/LL$/i)
+						item.name.should.match(/ll$/i)
+						item.name.should.match(/LL$/i)
 					});
 
 					done();
@@ -426,7 +431,7 @@ describe('Bookshelf Resource', function(){
 		describe('range', function(){
 			it('should should match dates between a given date range',function( done ){
 				server.inject({
-					url:'/test/user?created_at__range=2015-04-01,2015-05-01&limit=10',
+					url:'/test/user?registered__range=2015-04-01,2015-05-01&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -439,7 +444,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						assert.ok( within( item.created_at,start,end) );	
+						assert.ok( within( item.registered,start,end) );	
 					});
 
 					done();
@@ -448,7 +453,7 @@ describe('Bookshelf Resource', function(){
 
 			it('should reject an invalid date range', function( done ){
 				server.inject({
-					url:'/test/user?created_at__range=2015-05-01,2015-04-01&limit=10',
+					url:'/test/user?registered__range=2015-05-01,2015-04-01&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -464,7 +469,7 @@ describe('Bookshelf Resource', function(){
 		describe('ne', function(){
 			it('should only include values not equal to a specified value', function( done ){
 				server.inject({
-					url:'/test/user?first_name__ne=Greg&limit=10',
+					url:'/test/user?eyes__ne=blue&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -476,7 +481,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.first_name.should.not.equal('Greg');	
+						item.eyes.should.not.equal('blue');	
 					});
 
 					done();

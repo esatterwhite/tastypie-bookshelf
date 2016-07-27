@@ -12,7 +12,7 @@ exports.up = function(knex, Promise) {
 			table.string('eyeColor').notNullable();
 			table.enum('gender', ['male','female']).notNullable();
 			table.string('name').notNullable();
-			table.string('email').notNullable();
+			table.string('email').nullable();
 			table.string('phone').notNullable();
 			table.string('address').notNullable();
 			table.text('about','longtext').notNullable();
