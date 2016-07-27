@@ -312,7 +312,7 @@ describe('Bookshelf Resource', function(){
 		});
 
 		describe('startswith', function(){
-			it('should match values at the beginning of a string in a case sensitive manner', function( done ){
+			it.skip('should match values at the beginning of a string in a case sensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__startswith=Bi&limit=10',
 					method:'get',
@@ -333,7 +333,7 @@ describe('Bookshelf Resource', function(){
 				});
 				
 			});
-			it('should not match values at the end of a string in a case sensitive manner', function( done ){
+			it.skip('should not match values at the end of a string in a case sensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__startswith=Bi&limit=10',
 					method:'get',
@@ -358,7 +358,7 @@ describe('Bookshelf Resource', function(){
 		});
 
 		describe('istartswith', function(){
-			it('should match values that startwith a string in a case sensitive manner', function( done ){
+			it.skip('should match values that startwith a string in a case sensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__istartswith=Bi&limit=10',
 					method:'get',
@@ -382,7 +382,7 @@ describe('Bookshelf Resource', function(){
 			});
 		});
 		describe('endswith', function(){
-			it('should match values that endswith a string in a case sensitive manner', function( done ){
+			it.skip('should match values that endswith a string in a case sensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__endswith=ll&limit=10',
 					method:'get',
@@ -405,7 +405,7 @@ describe('Bookshelf Resource', function(){
 			});
 		});
 		describe('iendswith', function(){
-			it('should match values that endswith a string in a case insensitive manner', function( done ){
+			it.skip('should match values that endswith a string in a case insensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__iendswith=ll&limit=10',
 					method:'get',
