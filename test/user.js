@@ -12,8 +12,8 @@ User = bookshelf.Model.extend({
     tableName: 'auth_user',
     idAttribute:'auth_user_id',
     friends: function(){
-        return this.belongsToMany(User, 'auth_user_id')
-                    .through(UserFriend,'auth_friend_id','auth_user_id');
+        return this.belongsToMany(User, 'auth_user_id','auth_friend_id')
+                    .through(UserFriend,'auth_user_id','auth_friend_id');
     }
 });
 
