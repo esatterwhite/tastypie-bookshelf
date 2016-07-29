@@ -13,7 +13,7 @@ function within( now, start, end){
 	return ( now > start && now < end);
 }
 
-describe('memphis', function(){
+describe('tastypie', function(){
 
 	before(function( done ){
 		done();
@@ -170,7 +170,7 @@ describe('memphis', function(){
 						qb = qb.limit(10)
 						  .then( function( data ){
 						  	data.forEach( function( d ){
-						  		should.equal( d.email );
+						  		d.email.should.not.be.Null()
 						  	});
 						  	done();
 						  });
@@ -262,13 +262,13 @@ describe('memphis', function(){
 		describe('endswith', function(){
 			it('should match values that endswith a string in a case sensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.endswith(qb, 'greeting', 'me' )
+					filters.endswith(qb, 'name', 'ds' )
 						   .limit(10)
 						   .then( function( data ){
 						   		assert.ok( data.length )
 						   		data.forEach(function( item ){
-						   			item.greeting.should.match(/me$/);
-						   			item.greeting.should.not.match(/ME$/);
+						   			item.name.should.match(/ds$/);
+						   			item.name.should.not.match(/DS$/);
 						   		});
 						   		done();
 						   })
@@ -279,13 +279,13 @@ describe('memphis', function(){
 		describe('iendswith', function(){
 			it('should match values that endswith a string in a case insensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.iendswith(qb, 'greeting', 'me' )
+					filters.iendswith(qb, 'name', 'ER' )
 						   .limit(10)
 						   .then( function( data ){
 						   		assert.ok( data.length )
 						   		data.forEach(function( item ){
-						   			item.greeting.should.match(/me$/i);
-						   			item.greeting.should.match(/ME$/i);
+						   			item.name.should.match(/er$/i);
+						   			item.name.should.match(/ER$/i);
 						   		});
 						   		done();
 						   })
@@ -341,8 +341,8 @@ describe('memphis', function(){
 						.limit( 10 )
 						.then( function( data ){
 							data.forEach( function( item ){
-								item.id.should.be.a.number;
-								item.id.should.not.equal( 1 );
+								item.auth_user_id.should.be.a.number;
+								item.auth_user_id.should.not.equal( 1 );
 							})
 						});
 						done();
@@ -359,7 +359,7 @@ describe('memphis', function(){
 						.limit( 10 )
 						.then( function( data ){
 							data.forEach( function( item ){
-								ids.should.containEql( item.id );
+								ids.should.containEql( item.auth_user_id );
 							});
 						});
 						done();
@@ -375,7 +375,7 @@ describe('memphis', function(){
 						.limit( 10 )
 						.then( function( data ){
 							data.forEach( function( item ){
-								ids.should.not.containEql( data.id );
+								ids.should.not.containEql( data.auth_user_id );
 							});
 						});
 						done();
