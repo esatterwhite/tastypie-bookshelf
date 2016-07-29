@@ -40,7 +40,7 @@ describe('Bookshelf Resource', function(){
 				}
 			}
 			,fields:{
-				registered:{type:'date', nullable: false, blank:false}
+				registered:{type:'datetime', nullable: false, blank:false}
 				,name:{type:'char', nullable: false, blank: false}
 				,email:{type:'char', nullable: true, blank: false}
 				,eyes:{type:'char', nullable:false, blank:false, attribute:'eyeColor'}
@@ -69,7 +69,7 @@ describe('Bookshelf Resource', function(){
 				},
 				function( response ){
 					assert.equal( typeof response.result, 'string' )
-					var out = JSON.parse( response.result );;
+					var out = JSON.parse( response.result );
 
 					out.data.forEach(function( item ){
 						item.id.should.be.greaterThan(300 )
@@ -302,7 +302,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 
 					out.data.forEach(function( item ){
-						item.name.should.match(/ri/g)
+						item.name.should.match(/ri/gi)
 					});
 
 					done();
@@ -312,9 +312,9 @@ describe('Bookshelf Resource', function(){
 		});
 
 		describe('startswith', function(){
-			it.skip('should match values at the beginning of a string in a case sensitive manner', function( done ){
+			it('should match values at the beginning of a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?name__startswith=Bi&limit=10',
+					url:'/test/user?name__startswith=Br&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -325,17 +325,17 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.name.should.match(/^Bi/)
-						item.name.should.not.match(/^bi/)
+						item.name.should.match(/^Br/)
+						item.name.should.not.match(/^br/)
 					});
 
 					done();
 				});
 				
 			});
-			it.skip('should not match values at the end of a string in a case sensitive manner', function( done ){
+			it('should not match values at the end of a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?name__startswith=Bi&limit=10',
+					url:'/test/user?name__startswith=Br&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -347,8 +347,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.name.should.not.match(/Bi$/)
-						item.name.should.not.match(/bi$/)
+						item.name.should.not.match(/Br$/)
+						item.name.should.not.match(/br$/)
 					});
 
 					done();
@@ -358,9 +358,9 @@ describe('Bookshelf Resource', function(){
 		});
 
 		describe('istartswith', function(){
-			it.skip('should match values that startwith a string in a case sensitive manner', function( done ){
+			it('should match values that startwith a string in a case sensitive manner', function( done ){
 				server.inject({
-					url:'/test/user?name__istartswith=Bi&limit=10',
+					url:'/test/user?name__istartswith=Br&limit=10',
 					method:'get',
 					headers:{
 						"Accept":"application/json"
@@ -372,8 +372,8 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						item.name.should.match(/^Bi/i)
-						item.name.should.match(/^bi/i)
+						item.name.should.match(/^Br/i)
+						item.name.should.match(/^br/i)
 					});
 
 					done();
@@ -382,7 +382,7 @@ describe('Bookshelf Resource', function(){
 			});
 		});
 		describe('endswith', function(){
-			it.skip('should match values that endswith a string in a case sensitive manner', function( done ){
+			it('should match values that endswith a string in a case sensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__endswith=ll&limit=10',
 					method:'get',
@@ -405,7 +405,7 @@ describe('Bookshelf Resource', function(){
 			});
 		});
 		describe('iendswith', function(){
-			it.skip('should match values that endswith a string in a case insensitive manner', function( done ){
+			it('should match values that endswith a string in a case insensitive manner', function( done ){
 				server.inject({
 					url:'/test/user?name__iendswith=ll&limit=10',
 					method:'get',
@@ -444,7 +444,7 @@ describe('Bookshelf Resource', function(){
 					var out = JSON.parse( response.result );
 					assert(out.data.length,'Should return data');
 					out.data.forEach(function( item ){
-						assert.ok( within( item.registered,start,end) );	
+						assert.ok( within( new Date(item.registered),start,end) );	
 					});
 
 					done();
