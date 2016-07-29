@@ -4,7 +4,7 @@
   "description": "A tastypie resource for bookshelf and knex",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/dummy.spec.js"
+    "test": "mocha test/*.spec.js"
   },
   "repository": {
     "type": "git",
