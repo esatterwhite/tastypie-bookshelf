@@ -28,11 +28,11 @@ describe('memphis', function(){
 		describe('gt', function(){
 			it('should return data greater than the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.gt(qb, 'real_sold', 10 );
+					qb = filters.gt(qb, 'age', 10 );
 					qb.limit(10)
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.be.above( 10 );
+								d.age.should.be.above( 10 );
 							});
 							done();
 					  })
@@ -42,12 +42,12 @@ describe('memphis', function(){
 
 			it('should not return data less than the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.gt(qb, 'real_sold', 10 );
+					qb = filters.gt(qb, 'age', 10 );
 					qb = qb.limit(10);
 					qb
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.not.be.below( 10 );
+								d.age.should.not.be.below( 10 );
 							});
 							done();
 					  })
@@ -60,11 +60,11 @@ describe('memphis', function(){
 		describe('gte', function(){
 			it('should return data greater than the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.gte(qb, 'real_sold', 10 );
+					qb = filters.gte(qb, 'age', 10 );
 					qb.limit(10)
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.be.aboveOrEqual( 10 );
+								d.age.should.be.aboveOrEqual( 10 );
 							});
 							done();
 					  })
@@ -74,11 +74,11 @@ describe('memphis', function(){
 
 			it('should not return data less than the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.gt(qb, 'real_sold', 10 );
+					qb = filters.gt(qb, 'age', 10 );
 					qb.limit(10)
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.not.be.belowOrEqual( 10 );
+								d.age.should.not.be.belowOrEqual( 10 );
 							});
 							done();
 					  })
@@ -90,11 +90,11 @@ describe('memphis', function(){
 		describe('lt', function(){
 			it('should return data less than the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.lt(qb, 'real_sold', 10 );
+					qb = filters.lt(qb, 'age', 10 );
 					qb.limit(10)
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.be.below( 10 );
+								d.age.should.be.below( 10 );
 							});
 							done();
 					  })
@@ -104,12 +104,12 @@ describe('memphis', function(){
 
 			it('should not return data greater than the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.lt(qb, 'real_sold', 10 );
+					qb = filters.lt(qb, 'age', 10 );
 					qb = qb.limit(10);
 					qb
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.not.be.above( 10 );
+								d.age.should.not.be.above( 10 );
 							});
 							done();
 					  })
@@ -120,11 +120,11 @@ describe('memphis', function(){
 		describe('lte', function(){
 			it('should return data less than or equal to the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.lte(qb, 'real_sold', 10 );
+					qb = filters.lte(qb, 'age', 10 );
 					qb.limit(10)
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.be.belowOrEqual( 10 );
+								d.age.should.be.belowOrEqual( 10 );
 							});
 							done();
 					  })
@@ -134,12 +134,12 @@ describe('memphis', function(){
 
 			it('should not return data greater than or equal to the specified values', function( done ){
 				User.collection().query(function(qb){
-					qb = filters.lte(qb, 'real_sold', 10 );
+					qb = filters.lte(qb, 'age', 10 );
 					qb = qb.limit(10);
 					qb
 					  .then( function( data ){
 							data.forEach(function( d ){
-								d.real_sold.should.not.be.aboveOrEqual( 10 );
+								d.age.should.not.be.aboveOrEqual( 10 );
 							});
 							done();
 					  })
@@ -151,11 +151,11 @@ describe('memphis', function(){
 			describe('is true', function(){
 				it('should only return values where then value is null', function(done){
 					User.collection().query(function( qb ){
-						qb = filters.isnull(qb, 'issue', true );
+						qb = filters.isnull(qb, 'email', true );
 						qb = qb.limit(10)
 						  .then( function( data ){
 						  	data.forEach( function( d ){
-						  		should.equal(d.issue, null);
+						  		should.equal(d.email, null);
 						  	});
 						  	done();
 						  });
@@ -166,11 +166,11 @@ describe('memphis', function(){
 			describe('is false', function(){
 				it('should only return value that are not null', function( done ){
 					User.collection().query(function( qb ){
-						qb = filters.isnull(qb, 'issue', false );
+						qb = filters.isnull(qb, 'email', false );
 						qb = qb.limit(10)
 						  .then( function( data ){
 						  	data.forEach( function( d ){
-						  		should.equal( d.issue );
+						  		should.equal( d.email );
 						  	});
 						  	done();
 						  });
@@ -182,12 +182,12 @@ describe('memphis', function(){
 		describe('contains', function(){
 			it('should match values any where in a string in a case sensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.contains(qb, 'url', 'ead' )
+					filters.contains(qb, 'greeting', 'ead' )
 						   .limit(10)
 						   .then( function( data ){
 						   		data.forEach(function( item ){
-						   			item.url.should.match(/ead/g);
-						   			item.url.should.not.match(/EAD/g);
+						   			item.greeting.should.match(/ead/g);
+						   			item.greeting.should.not.match(/EAD/g);
 						   		});
 						   		done();
 						   })
@@ -199,13 +199,13 @@ describe('memphis', function(){
 		describe('icontains', function(){
 			it('should match values any where in a string in a case insensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.contains(qb, 'url', 'ead' )
+					filters.contains(qb, 'greeting', 'ead' )
 						   .limit(10)
 						   .then( function( data ){
 						   		data.forEach(function( item ){
-						   			item.url.should.match(/ead/gi);
-						   			item.url.should.match(/EAD/gi);
-						   			item.url.should.not.match(/abacadaba/);
+						   			item.greeting.should.match(/ead/gi);
+						   			item.greeting.should.match(/EAD/gi);
+						   			item.greeting.should.not.match(/abacadaba/);
 						   		});
 						   		done();
 						   })
@@ -217,12 +217,12 @@ describe('memphis', function(){
 		describe('startswith', function(){
 			it('should match values at the beginning of a string in a case sensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.startswith(qb, 'url', 'thread' )
+					filters.startswith(qb, 'greeting', 'thread' )
 						   .limit(10)
 						   .then( function( data ){
 						   		data.forEach(function( item ){
-						   			item.url.should.match(/^thread/);
-						   			item.url.should.not.match(/^THREAD/);
+						   			item.greeting.should.match(/^thread/);
+						   			item.greeting.should.not.match(/^THREAD/);
 						   		});
 						   		done();
 						   })
@@ -231,11 +231,11 @@ describe('memphis', function(){
 			});
 			it('should not match values at the end of a string in a case sensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.startswith(qb, 'url', 'thread' )
+					filters.startswith(qb, 'greeting', 'thread' )
 						   .limit(10)
 						   .then( function( data ){
 						   		data.forEach(function( item ){
-						   			item.url.should.not.match(/thread$/);
+						   			item.greeting.should.not.match(/thread$/);
 						   		});
 						   		done()
 						   })
@@ -247,11 +247,11 @@ describe('memphis', function(){
 		describe('istartswith', function(){
 			it('should match values that startwith a string in a case sensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.istartswith(qb, 'url', 'THREAD' )
+					filters.istartswith(qb, 'greeting', 'THREAD' )
 						   .limit(10)
 						   .then( function( data ){
 						   		data.forEach(function( item ){
-						   			item.url.should.match(/^thread/);
+						   			item.greeting.should.match(/^thread/);
 						   		});
 						   		done();
 						   })
@@ -262,13 +262,13 @@ describe('memphis', function(){
 		describe('endswith', function(){
 			it('should match values that endswith a string in a case sensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.endswith(qb, 'url', 'me' )
+					filters.endswith(qb, 'greeting', 'me' )
 						   .limit(10)
 						   .then( function( data ){
 						   		assert.ok( data.length )
 						   		data.forEach(function( item ){
-						   			item.url.should.match(/me$/);
-						   			item.url.should.not.match(/ME$/);
+						   			item.greeting.should.match(/me$/);
+						   			item.greeting.should.not.match(/ME$/);
 						   		});
 						   		done();
 						   })
@@ -279,13 +279,13 @@ describe('memphis', function(){
 		describe('iendswith', function(){
 			it('should match values that endswith a string in a case insensitive manner', function( done ){
 				User.collection().query(function( qb ){
-					filters.iendswith(qb, 'url', 'me' )
+					filters.iendswith(qb, 'greeting', 'me' )
 						   .limit(10)
 						   .then( function( data ){
 						   		assert.ok( data.length )
 						   		data.forEach(function( item ){
-						   			item.url.should.match(/me$/i);
-						   			item.url.should.match(/ME$/i);
+						   			item.greeting.should.match(/me$/i);
+						   			item.greeting.should.match(/ME$/i);
 						   		});
 						   		done();
 						   })
@@ -301,12 +301,12 @@ describe('memphis', function(){
 					start = new Date(2015, 7, 1)
 					end = new Date(2015, 8, 1)
 
-					filters.range(qb, 'created_at', ['2015-08-01', '2015-09-01'] )
+					filters.range(qb, 'registered', ['2015-08-01', '2015-09-01'] )
 						   .limit(10)
 						   .then( function( data ){
 						   		assert.ok( data.length )
 						   		data.forEach(function( item ){
-						   			should.ok( within( item.created_at, start, end ))
+						   			should.ok( within( item.registered, start, end ))
 						   		});
 						   		done();
 						   })
@@ -321,7 +321,7 @@ describe('memphis', function(){
 				assert.throws(function(){
 					var qb = User.collection().query().clone()
 
-					filters.range(qb, 'created_at', ['2015-09-01', '2015-08-01'] )
+					filters.range(qb, 'registered', ['2015-09-01', '2015-08-01'] )
 						   .limit(10)
 						   .then( function( data ){
 						   		done(new Error('Filter did not throw exception'));
@@ -337,7 +337,7 @@ describe('memphis', function(){
 			it('should only include values not equal to a specified value', function( done ){
 				User.collection().query(function( qb ){
 					filters
-						.ne( qb, 'id', 1)
+						.ne( qb, 'auth_user_id', 1)
 						.limit( 10 )
 						.then( function( data ){
 							data.forEach( function( item ){
@@ -355,7 +355,7 @@ describe('memphis', function(){
 				var ids = [1,2,3,4,5,6,7,8];
 				User.collection().query(function( qb ){
 					filters
-						.in( qb, 'id', ids )
+						.in( qb, 'auth_user_id', ids )
 						.limit( 10 )
 						.then( function( data ){
 							data.forEach( function( item ){
@@ -371,7 +371,7 @@ describe('memphis', function(){
 				var ids = [1,2,3,4,5,6,7,8];
 				User.collection().query(function( qb ){
 					filters
-						.in( qb, 'id', ids )
+						.in( qb, 'auth_user_id', ids )
 						.limit( 10 )
 						.then( function( data ){
 							data.forEach( function( item ){
