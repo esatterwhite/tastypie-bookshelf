@@ -1,5 +1,5 @@
 {
-  "name": "tastypie-bookshelf",
+  "name": "@tastypie/bookshelf",
   "version": "1.0.0",
   "description": "A tastypie resource for bookshelf and knex",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/esatterwhite/tastypie-bookshelf.git"
+    "url": "https://github.com/node-tastypie/tastypie-bookshelf.git"
   },
   "author": {
     "name": "Eric Satterwhite",
@@ -16,9 +16,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/esatterwhite/tastypie-bookshelf/issues"
+    "url": "https://github.com/node-tastypie/tastypie-bookshelf/issues"
   },
-  "homepage": "https://github.com/esatterwhite/tastypie-bookshelf",
+  "homepage": "https://github.com/node-tastypie/tastypie-bookshelf",
   "devDependencies": {
     "bookshelf": "^0.10.0",
     "boom": "^3.0.0",
